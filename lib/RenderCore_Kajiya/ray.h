@@ -18,4 +18,7 @@ public:
 	tuple<Triangle*, float> GetNearestIntersection();
 	float4 DetermineColor(Triangle* triangle, CoreMaterial* material, float4 intersectionPoint, uint recursionDepth);
 	float4 GetRefractionDirection(Triangle* triangle, CoreMaterial* material);
+private:
+	float4 GetSampleHemisphere(float r1, float r2);
+	void CreateCoordinateSystem(float4& N, float4& Nt, float4& Nb);
 };

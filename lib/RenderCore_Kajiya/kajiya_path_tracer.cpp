@@ -6,6 +6,7 @@
 #include "light.h"
 #include "tuple"
 #include "vector"
+#include "random"
 
 vector<Triangle*> KajiyaPathTracer::scene = vector<Triangle*>();
 vector<Light*> KajiyaPathTracer::lights = vector<Light*>();
@@ -18,8 +19,8 @@ void KajiyaPathTracer::Initialise() {
 	lights.push_back(new Light(
 		new Triangle(
 			make_float4(0, 20, 0, 0), 
-			make_float4(10, 20, 0, 0), 
-			make_float4(0, 20, 10, 0), 
+			make_float4(100, 20, 0, 0), 
+			make_float4(0, 20, 100, 0), 
 			-1
 		),
 		5
@@ -78,6 +79,12 @@ void KajiyaPathTracer::Render(const ViewPyramid& view, const Bitmap* screen) {
 		KajiyaPathTracer::stillFrames = 1;
 	}
 
+}
+
+float KajiyaPathTracer::GetRandomFloat(float x, float y) {
+	std::default_random_engine generator;
+	std::uniform_real_distribution<float> distribution(x, y);
+	return distribution(generator);
 }
 
 void KajiyaPathTracer::AddTriangle(float4 v0, float4 v1, float4 v2, uint materialIndex) {

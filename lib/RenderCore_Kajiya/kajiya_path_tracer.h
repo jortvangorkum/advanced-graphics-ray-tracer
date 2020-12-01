@@ -5,6 +5,7 @@
 #include "tuple"
 #include "vector"
 #include "triangle.h"
+#include "random"
 
 class KajiyaPathTracer
 {
@@ -22,6 +23,7 @@ public:
 	static void Initialise();
 	static void AddTriangle(float4 v0, float4 v1, float4 v2, uint materialIndex);
 	static void Render(const ViewPyramid& view, const Bitmap* screen);
+	static float GetRandomFloat(float x, float y);
 private:
 
 	/** Old camera position */

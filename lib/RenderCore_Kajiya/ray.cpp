@@ -25,7 +25,6 @@ float4 Ray::Trace(uint recursionDepth) {
 	float intersectionDistance = get<1>(nearestIntersection);
 
 	if (intersectionDistance > 0) {
-
 		/** Hit a light */
 		if (nearestTriangle->materialIndex == -1) {
 			return make_float4(1, 1, 1, 0);
@@ -52,23 +51,28 @@ float4 Ray::Trace(uint recursionDepth) {
 			}
 		}
 
+		float4 Nt;
+		float4 Nb;
+		this->CreateCoordinateSystem(normal, Nt, Nb);
 
-		/** Select a random light */
-		Light* selectedLight = KajiyaPathTracer::lights[0];
-		float4 lightColor = make_float4(1, 1, 1, 0);
+		float r1 = KajiyaPathTracer::GetRandomFloat(0, 1);
+		float r2 = KajiyaPathTracer::GetRandomFloat(0, 1);
+		float4 sample = this->GetSampleHemisphere(r1, r2);
 
-		float4 lineIntserToLight = selectedLight->shape->GetRandomPoint() - intersectionPoint;
-		float distToLight = length(lineIntserToLight);
-		float4 dirToLight = normalize(lineIntserToLight);
+		float4 sampleWorld = normalize(make_float4(
+			sample.x * Nb.x + sample.y * normal.x + sample.z * Nt.x,
+			sample.x * Nb.y + sample.y * normal.y + sample.z * Nt.y,
+			sample.x * Nb.z + sample.y * normal.z + sample.z * Nt.z,
+			0
+		));
 
-		float3 BRDF = material.color.value / PI;
+		this->origin = intersectionPoint + (sampleWorld * EPSILON);
+		this->direction = sampleWorld;
+		float4 tracedIllumination = this->Trace(recursionDepth + 1);
+		float pdf = 1.0 / (2.0 * PI);
+		float4 indirectIllumination = r1 * tracedIllumination / pdf;
 
-		this->origin = intersectionPoint + EPSILON * dirToLight;
-		this->direction = dirToLight;
-
-		float4 Ei = this->Trace(recursionDepth + 1) * dot(normal, dirToLight);
-
-		return PI * 2.0f * make_float4(BRDF, 0) * Ei;
+		return indirectIllumination * make_float4(material.color.value, 0) / PI;
 	}
 
 	return make_float4(0,0,0,0);
@@ -109,6 +113,22 @@ float4 Ray::DetermineColor(Triangle* triangle, CoreMaterial* material, float4 in
 	return color;
 }
 
+float4 Ray::GetSampleHemisphere(float r1, float r2) {
+	float sinTheta = sqrtf(1 - r1 * r1);
+	float phi = 2 * PI * r2;
+	float x = sinTheta * cosf(phi);
+	float z = sinTheta * sinf(phi);
+	return make_float4(x, r1, z, 0);
+}
+
+void Ray::CreateCoordinateSystem(float4& N, float4& Nt, float4& Nb) {
+	if (std::fabs(N.x) > std::fabs(N.y)) {
+		Nt = make_float4(N.z, 0, -N.x, 0) / sqrtf(N.x * N.x + N.z * N.z);
+	} else {
+		Nt = make_float4(0, -N.z, N.y, 0) / sqrtf(N.y * N.y + N.z * N.z);
+	}
+	Nb = cross(N, Nt);
+}
 
 float4 Ray::GetRefractionDirection(Triangle* triangle, CoreMaterial* material) {
 	float4 normal = triangle->GetNormal();
@@ -139,6 +159,8 @@ float4 Ray::GetRefractionDirection(Triangle* triangle, CoreMaterial* material) {
 	}
 
 }
+
+
 
 tuple<Triangle*, float> Ray::GetNearestIntersection() {
 	float minDistance = NULL;
