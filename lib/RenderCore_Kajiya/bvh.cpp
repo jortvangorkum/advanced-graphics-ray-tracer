@@ -22,5 +22,5 @@ BVH::BVH(int triangleIndex, int triangleCount) {
 	this->root->first = 0;
 	this->root->count = triangleCount;
 	this->root->UpdateBounds(this->triangleIndices);
-	this->root->SubdivideNode(this->pool, this->triangleIndices, 0, 15);
+	this->root->SubdivideNode(this->pool, this->triangleIndices, 0, size);
 }

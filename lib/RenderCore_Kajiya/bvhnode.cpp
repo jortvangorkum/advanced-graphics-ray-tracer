@@ -28,8 +28,6 @@ void BVHNode::SubdivideNode(BVHNode* pool, int* triangleIndices, int start, int 
 	
 	if (!this->PartitionTriangles(pool, triangleIndices)) { return; }
 
-	cout << this->count << endl;
-
 	BVHNode* left = &pool[this->left];
 	BVHNode* right = &pool[this->right];
 	
