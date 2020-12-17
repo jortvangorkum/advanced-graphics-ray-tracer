@@ -10,7 +10,8 @@ Bin* BVH::binsLeft = new Bin[BVH::binCount];
 Bin* BVH::binsRight = new Bin[BVH::binCount];
 
 BVH::BVH(int triangleIndex, int triangleCount) {
-	this->pool = new BVHNode[triangleCount * 2 - 1];
+	int size = triangleCount * 2 - 1;
+	this->pool = new BVHNode[size];
 	this->root = &this->pool[0];
 	this->poolPtr = 1;
 
@@ -22,5 +23,5 @@ BVH::BVH(int triangleIndex, int triangleCount) {
 	this->root->first = 0;
 	this->root->count = triangleCount;
 	this->root->UpdateBounds(this->triangleIndices);
-	this->root->SubdivideNode(this->pool, this->triangleIndices, this->poolPtr);
+	this->root->SubdivideNode(this->pool, this->triangleIndices, 1, 9);
 }

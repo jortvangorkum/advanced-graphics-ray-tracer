@@ -6,19 +6,31 @@
 #include "ray.h"
 #include "tuple"
 
-void BVHNode::SubdivideNode(BVHNode* pool, int* triangleIndices, int &poolPtr) {
+#include <iostream>
+#include <conio.h>
+
+void BVHNode::SubdivideNode(BVHNode* pool, int* triangleIndices, int start, int end) {
+	if (end - start == 1) { return; }
+
+	int mid = start + (end - start) / 2;
+	//cout << "start: " << start << endl;
+	//cout << "mid: " << mid << endl;
+	//cout << "end: " << end << endl;
+
+	//getch();
+
 	if (this->count <= 2) { return; }
 	
-	this->left = poolPtr;
-	poolPtr += 2;
+	this->left = start;
+	this->right = mid;
 	
 	if (!this->PartitionTriangles(pool, triangleIndices)) { return; }
 
-	BVHNode* left = &pool[this->left];
-	BVHNode* right = &pool[this->left + 1];
+	BVHNode* left = &pool[start];
+	BVHNode* right = &pool[mid];
 	
-	left->SubdivideNode(pool, triangleIndices, poolPtr);
-	right->SubdivideNode(pool, triangleIndices, poolPtr);
+	left->SubdivideNode(pool, triangleIndices, this->left, mid);
+	right->SubdivideNode(pool, triangleIndices, mid + 1, end);
 	
 	this->isLeaf = false;
 }
@@ -133,7 +145,7 @@ bool BVHNode::PartitionTriangles(BVHNode* pool, int* triangleIndices) {
 	Bin* binRight = &BVH::binsRight[binIndex];
 
 	BVHNode* left = &pool[this->left];
-	BVHNode* right = &pool[this->left + 1];
+	BVHNode* right = &pool[this->right];
 
 	left->first = this->first;
 	left->count = j - this->first;
@@ -156,6 +168,7 @@ void BVHNode::UpdateBounds(int* triangleIndices) {
 }
 
 void BVHNode::Traverse(Ray &ray, BVHNode* pool, int* triangleIndices, tuple<Triangle*, float, Ray::HitType> &intersection) {
+
 	float distBoundingBox;
 	if (!ray.IntersectionBounds(this->bounds, distBoundingBox)) { return; }
 	
@@ -169,7 +182,7 @@ void BVHNode::Traverse(Ray &ray, BVHNode* pool, int* triangleIndices, tuple<Tria
 	}
 
 	BVHNode* left = &pool[this->left];
-	BVHNode* right = &pool[this->left + 1];
+	BVHNode* right = &pool[this->right];
 
 	float rayDirAxis;
 	if (this->splitAxis == 0) {
