@@ -9,28 +9,32 @@
 #include <iostream>
 #include <conio.h>
 
-void BVHNode::SubdivideNode(BVHNode* pool, int* triangleIndices, int start, int end) {
-	if (end - start == 1) { return; }
-
-	int mid = start + (end - start) / 2;
-	//cout << "start: " << start << endl;
-	//cout << "mid: " << mid << endl;
-	//cout << "end: " << end << endl;
-
-	//getch();
-
+void BVHNode::SubdivideNode(BVHNode* pool, int* triangleIndices, int start, int size) {
+	/** use ceiling for mid */
+	if (size == 1) return;
 	if (this->count <= 2) { return; }
+
+	int mid = size / 2 + (size % 2 != 0);
+	int sizeLeft = size / 2;
+	int sizeRight = size / 2;
+
 	
-	this->left = start;
-	this->right = mid;
+	/** set left one to right */
+	int leftPoint = start + 1;
+	this->left = leftPoint;
+	/** set right to mid point */
+	int rightPoint = start + mid;
+	this->right = rightPoint;
 	
 	if (!this->PartitionTriangles(pool, triangleIndices)) { return; }
 
-	BVHNode* left = &pool[start];
-	BVHNode* right = &pool[mid];
+	cout << this->count << endl;
+
+	BVHNode* left = &pool[this->left];
+	BVHNode* right = &pool[this->right];
 	
-	left->SubdivideNode(pool, triangleIndices, this->left, mid);
-	right->SubdivideNode(pool, triangleIndices, mid + 1, end);
+	left->SubdivideNode(pool, triangleIndices, this->left, sizeLeft);
+	right->SubdivideNode(pool, triangleIndices, this->right, sizeRight);
 	
 	this->isLeaf = false;
 }
