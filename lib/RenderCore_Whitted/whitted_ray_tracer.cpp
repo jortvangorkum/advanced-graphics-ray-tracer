@@ -25,7 +25,7 @@ Ray WhittedRayTracer::shadowRay = Ray(make_float4(0, 0, 0, 0), make_float4(0, 0,
 
 /** Whitted Ray Tracer Settings */
 int WhittedRayTracer::recursionThreshold = 3;
-int WhittedRayTracer::antiAliasingAmount = 1;
+int WhittedRayTracer::antiAliasingAmount = 2;
 float WhittedRayTracer::gammaCorrection = 2.2;
 bool WhittedRayTracer::applyPostProcessing = false;
 
@@ -35,10 +35,11 @@ bool WhittedRayTracer::applyPostProcessing = false;
 
 /** Intialise Whitted Ray Tracer */
 void WhittedRayTracer::Initialise() {
+
 	/** Lights */
 	lights.push_back(new Light(
-		make_float4(5, 20, 0, 0),
-		200
+		make_float4(15, 30, 20, 0),
+		700
 	));
 }
 
