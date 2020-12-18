@@ -6,8 +6,8 @@
 int BVH::binCount = 16;
 
 Bin* BVH::bins = new Bin[BVH::binCount];
-Bin* BVH::binsLeft = new Bin[BVH::binCount];
-Bin* BVH::binsRight = new Bin[BVH::binCount];
+Bin* BVH::binsLeft = new Bin[BVH::binCount - 1];
+Bin* BVH::binsRight = new Bin[BVH::binCount - 1];
 
 BVH::BVH(int triangleIndex, int triangleCount) {
 	this->pool = new BVHNode[triangleCount * 2 - 1];
