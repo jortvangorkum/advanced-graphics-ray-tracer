@@ -14,8 +14,13 @@ void BVHNode::SubdivideNode(BVHNode* pool, int* triangleIndices, int &poolPtr) {
 	
 	if (!this->PartitionTriangles(pool, triangleIndices)) { return; }
 
+
 	BVHNode* left = &pool[this->left];
 	BVHNode* right = &pool[this->left + 1];
+
+	if (left->count == 0 || right->count == 0) {
+		return;
+	}
 	
 	left->SubdivideNode(pool, triangleIndices, poolPtr);
 	right->SubdivideNode(pool, triangleIndices, poolPtr);
@@ -73,7 +78,7 @@ bool BVHNode::PartitionTriangles(BVHNode* pool, int* triangleIndices) {
 
 	/** Do a linear pass through the bins from the left */
 	BVH::binsLeft[0] = BVH::bins[0];
-	for (int i = 1; i < BVH::binCount; i++) {
+	for (int i = 1; i < BVH::binCount - 1; i++) {
 		Bin* bin = &BVH::bins[i];
 		Bin* binLeft = &BVH::binsLeft[i];
 		Bin* prevBinLeft = &BVH::binsLeft[i - 1];
@@ -84,9 +89,9 @@ bool BVHNode::PartitionTriangles(BVHNode* pool, int* triangleIndices) {
 	}
 
 	/** Do a linear pass through the bins from the right */
-	BVH::binsRight[BVH::binCount - 1] = BVH::bins[BVH::binCount - 1];
-	for (int i = BVH::binCount - 2; i >= 0; i--) {
-		Bin* bin = &BVH::bins[i];
+	BVH::binsRight[BVH::binCount - 2] = BVH::bins[BVH::binCount - 1];
+	for (int i = BVH::binCount - 3; i >= 0; i--) {
+		Bin* bin = &BVH::bins[i + 1];
 		Bin* binRight = &BVH::binsRight[i];
 		Bin* prevBinRight = &BVH::binsRight[i + 1];
 
@@ -99,7 +104,7 @@ bool BVHNode::PartitionTriangles(BVHNode* pool, int* triangleIndices) {
 	float bestCost = std::numeric_limits<float>::max();
 	float curCost = this->bounds.Area() * this->count;
 
-	for (int i = 0; i < BVH::binCount; i++) {
+	for (int i = 0; i < BVH::binCount - 1; i++) {
 		Bin* binLeft = &BVH::binsLeft[i];
 		Bin* binRight = &BVH::binsRight[i];
 

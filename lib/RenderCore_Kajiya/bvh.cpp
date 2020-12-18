@@ -3,11 +3,11 @@
 #include "bin.h"
 #include "vector"
 
-int BVH::binCount = 16;
+int BVH::binCount = 4;
 
 Bin* BVH::bins = new Bin[BVH::binCount];
-Bin* BVH::binsLeft = new Bin[BVH::binCount];
-Bin* BVH::binsRight = new Bin[BVH::binCount];
+Bin* BVH::binsLeft = new Bin[BVH::binCount - 1];
+Bin* BVH::binsRight = new Bin[BVH::binCount - 1];
 
 BVH::BVH(int triangleIndex, int triangleCount) {
 	this->pool = new BVHNode[triangleCount * 2 - 1];
