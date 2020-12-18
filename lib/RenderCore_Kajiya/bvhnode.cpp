@@ -57,6 +57,9 @@ bool BVHNode::PartitionTriangles(BVHNode* pool, int* triangleIndices) {
 
 	float cbmin = centroidBoundingBox.bmin[axis];
 	float cbmax = centroidBoundingBox.bmax[axis];
+
+	if (abs(cbmax - cbmin) <= EPSILON) { return false; }
+
 	float k1 = (BVH::binCount * (1 - EPSILON)) / (cbmax - cbmin);
 
 	/** Fill the bins with Triangles */

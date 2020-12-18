@@ -3,6 +3,21 @@ Jort van Gorkum - 6142834
 Vince van Noort - 6187021
 
 ## Part 2
+All basics done.
+
+### Additional points implemented:
+- Construct the BVH for a 2M triangle scene in less than 1 second (still using SAH; 1 pt).
+
+Nefertiti
+![image info](./renders/build-bvh-under-1-sec.JPG)
+
+Configuration:
+- bins = 4
+- split on z-axis
+
+Computer Specs:
+- CPU: Intel i7 8750H
+- Memory: 16GB
 
 ### BVH building - Monster
 created polygon soup for 123216 triangles in 0.005s
