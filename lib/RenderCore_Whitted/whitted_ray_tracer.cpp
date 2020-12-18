@@ -1,9 +1,8 @@
 #include "whitted_ray_tracer.h"
 #include "core_settings.h"
 #include "ray.h"
-#include "material.h"
-#include "triangle.h"
 #include "light.h"
+#include "triangle.h";
 #include "tuple"
 #include "vector"
 
@@ -15,6 +14,7 @@
 vector<Triangle*> WhittedRayTracer::scene = vector<Triangle*>();
 vector<Light*> WhittedRayTracer::lights = vector<Light*>();
 vector<CoreMaterial> WhittedRayTracer::materials;
+vector<BVH*> WhittedRayTracer::bvhs;
 
 /** Global Illumitation */
 float4 WhittedRayTracer::globalIllumination = make_float4(0.2, 0.2, 0.2, 0);
@@ -25,7 +25,7 @@ Ray WhittedRayTracer::shadowRay = Ray(make_float4(0, 0, 0, 0), make_float4(0, 0,
 
 /** Whitted Ray Tracer Settings */
 int WhittedRayTracer::recursionThreshold = 3;
-int WhittedRayTracer::antiAliasingAmount = 1;
+int WhittedRayTracer::antiAliasingAmount = 2;
 float WhittedRayTracer::gammaCorrection = 2.2;
 bool WhittedRayTracer::applyPostProcessing = false;
 
@@ -35,10 +35,11 @@ bool WhittedRayTracer::applyPostProcessing = false;
 
 /** Intialise Whitted Ray Tracer */
 void WhittedRayTracer::Initialise() {
+
 	/** Lights */
 	lights.push_back(new Light(
-		make_float4(-5, 20, 0, 0),
-		200
+		make_float4(15, 30, 25, 0),
+		1100
 	));
 }
 
@@ -85,7 +86,7 @@ void WhittedRayTracer::Render(const ViewPyramid& view, const Bitmap* screen) {
 					primaryRay.direction = rayDirection;
 
 					/** Trace the ray */
-					pixelColor += primaryRay.Trace();
+					pixelColor += primaryRay.Trace(WhittedRayTracer::bvhs[0], 0);
 				}
 			}
 
@@ -96,6 +97,7 @@ void WhittedRayTracer::Render(const ViewPyramid& view, const Bitmap* screen) {
 			screen->pixels[index] = WhittedRayTracer::ConvertColorToInt(pixelColor);
 		}
 	}
+
 
 	if (WhittedRayTracer::applyPostProcessing) {
 		WhittedRayTracer::ApplyPostProcessing(screen);

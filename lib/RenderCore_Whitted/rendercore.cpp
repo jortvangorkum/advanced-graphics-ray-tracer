@@ -15,6 +15,7 @@
 
 #include "core_settings.h"
 #include "whitted_ray_tracer.h"
+#include "bvh.h"
 #include "vector"
 #include "chrono"
 
@@ -48,6 +49,7 @@ void RenderCore::SetTarget( GLTexture* target, const uint )
 //  +-----------------------------------------------------------------------------+
 void RenderCore::SetGeometry( const int meshIdx, const float4* vertexData, const int vertexCount, const int triangleCount, const CoreTri* triangleData )
 {
+	int triangleIndex = max((int) WhittedRayTracer::scene.size() - 1, 0);
 	for (int i = 0; i < triangleCount; i++) {
 		CoreTri triangle = triangleData[i];
 
@@ -58,6 +60,18 @@ void RenderCore::SetGeometry( const int meshIdx, const float4* vertexData, const
 
 		WhittedRayTracer::AddTriangle(v0, v1, v2, materialIndex);
 	}
+	auto start = std::chrono::high_resolution_clock::now();
+
+	BVH* bvh = new BVH(triangleIndex, triangleCount);
+
+	auto finish = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<float> elapsed = finish - start;
+	auto durationMs = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed);
+	std::cout << "Building BVH Time: " << durationMs.count() << "ms\n";
+	
+	cout << "Amount of splits: " << (bvh->poolPtr + 1) / 2 << "\n";
+
+	WhittedRayTracer::bvhs.push_back(bvh);
 }
 
 //  +-----------------------------------------------------------------------------+
@@ -76,11 +90,14 @@ void RenderCore::Render( const ViewPyramid& view, const Convergence converge, bo
 {
 	// render
 	auto start = std::chrono::high_resolution_clock::now();
+
 	WhittedRayTracer::Render(view, screen);
+	
 	auto finish = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<float> elapsed = finish - start;
 	auto durationMs = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed);
-	std::cout << "Elapsed Time: " << durationMs.count() << "ms\n";
+	std::cout << "Render Time: " << durationMs.count() << "ms\n";
+	
 	// copy pixel buffer to OpenGL render target texture
 	glBindTexture( GL_TEXTURE_2D, targetTextureID );
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, screen->width, screen->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, screen->pixels);

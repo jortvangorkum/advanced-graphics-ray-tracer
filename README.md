@@ -2,6 +2,18 @@
 Jort van Gorkum - 6142834
 Vince van Noort - 6187021
 
+## Part 2
+
+### BVH building - Monster
+created polygon soup for 123216 triangles in 0.005s
+Building BVH Time: 107ms
+
+Monster Kajiya - Render time per frame ~4500ms
+![image info](./renders/monster-kajiya.JPG)
+Monster Whitted - Render time per frame ~9600ms (with 4x anti-aliasing)
+![image info](./renders/monster-whitted.JPG)
+
+## Part 1
 All basics done.
 
 ### Additional points implemented:
