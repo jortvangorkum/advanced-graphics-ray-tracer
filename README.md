@@ -21,7 +21,7 @@ Computer Specs:
 
 ### BVH building - Monster
 created polygon soup for 123216 triangles in 0.005s
-Building BVH Time: 107ms
+Building BVH Time: 75ms
 
 Monster Kajiya - Render time per frame ~4500ms
 ![image info](./renders/monster-kajiya.JPG)
