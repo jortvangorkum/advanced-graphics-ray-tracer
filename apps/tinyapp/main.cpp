@@ -34,7 +34,7 @@ static std::bitset<1024> keystates;
 void PrepareScene()
 {
 	/** Add light material */
-	const int emittance = 5;
+	const int emittance = 15;
 	renderer->AddMaterial(make_float3(emittance));
 	/** Add scene */
 	int boxScene = renderer->AddMesh("../_shareddata/basic_box.obj", 0.1f);

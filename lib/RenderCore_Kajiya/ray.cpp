@@ -62,6 +62,7 @@ float4 Ray::Trace(BVH* bvh, uint recursionDepth) {
 
 		CoreMaterial material = KajiyaPathTracer::materials[nearestTriangle->materialIndex];
 		float4 BRDF = make_float4(material.color.value / PI, 0);
+		float4 intersectionPoint = this->GetIntersectionPoint(intersectionDistance);
 
 		/** 
 		----- 
@@ -69,12 +70,14 @@ float4 Ray::Trace(BVH* bvh, uint recursionDepth) {
 		----- 
 		*/
 		float4 directLight = make_float4(0);
-		int randomLightIndex = Rand(KajiyaPathTracer::lights.size());
+		
+		int randomLightIndex = Rand(KajiyaPathTracer::lights.size() - 1);
 		Triangle* randomLight = KajiyaPathTracer::lights[randomLightIndex];
 		float4 randomLightPoint = randomLight->GetRandomPoint();
-		KajiyaPathTracer::shadowRay.origin = this->origin;
-		float4 vectorToLight = randomLightPoint - this->origin;
+
+		float4 vectorToLight = randomLightPoint - intersectionPoint;
 		KajiyaPathTracer::shadowRay.direction = normalize(vectorToLight);
+		KajiyaPathTracer::shadowRay.origin = intersectionPoint + KajiyaPathTracer::shadowRay.direction * EPSILON;
 
 		float4 lightNormal = randomLight->GetNormal();
 		float ndotl = dot(nearestTriangle->GetNormal(), KajiyaPathTracer::shadowRay.direction);
@@ -86,10 +89,10 @@ float4 Ray::Trace(BVH* bvh, uint recursionDepth) {
 		) {
 			tuple<Triangle*, float, Ray::HitType> lightIntersection = make_tuple<Triangle*, float, Ray::HitType>(NULL, NULL, Ray::HitType::Nothing);
 			bvh->root->Traverse(KajiyaPathTracer::shadowRay, bvh->pool, bvh->triangleIndices, lightIntersection);
-			Triangle* directIntersectionTriangle = get<0>(lightIntersection);
+			float directIntersectionDist = get<1>(lightIntersection);
+			float distanceToLight = length(vectorToLight);
 
-			if (randomLight == directIntersectionTriangle) {
-				float distanceToLight = length(vectorToLight);
+			if (distanceToLight < directIntersectionDist + EPSILON) {
 				float solidAngle = (nldotl * randomLight->GetArea()) / (distanceToLight * distanceToLight);
 				CoreMaterial lightMaterial = KajiyaPathTracer::materials[randomLight->materialIndex];
 				directLight = make_float4(lightMaterial.color.value, 0) * solidAngle * BRDF * ndotl * KajiyaPathTracer::lights.size();
@@ -103,7 +106,7 @@ float4 Ray::Trace(BVH* bvh, uint recursionDepth) {
 		----- 
 		*/
 		float4 normal = nearestTriangle->GetNormal();
-		float4 intersectionPoint = this->GetIntersectionPoint(intersectionDistance);
+		
 
 		float randomChoice = RandomFloat();
 
