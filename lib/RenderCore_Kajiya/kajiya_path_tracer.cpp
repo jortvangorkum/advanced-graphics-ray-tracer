@@ -31,6 +31,13 @@ float3 KajiyaPathTracer::oldCameraP1 = make_float3(0, 0, 0);
 float3 KajiyaPathTracer::oldCameraP2 = make_float3(0, 0, 0);
 float3 KajiyaPathTracer::oldCameraP3 = make_float3(0, 0, 0);
 
+/** Adaptive sampling */
+float KajiyaPathTracer::samplingThreshold = 8;
+float KajiyaPathTracer::targetVariance = 0.05;
+
+uint* KajiyaPathTracer::numberOfSamples = new uint[SCRHEIGHT * SCRWIDTH];
+float4* KajiyaPathTracer::sums = new float4[SCRHEIGHT * SCRWIDTH];
+float4* KajiyaPathTracer::sumSquared = new float4[SCRHEIGHT * SCRWIDTH];
 
 int KajiyaPathTracer::recursionThreshold = 3;
 Ray KajiyaPathTracer::primaryRay = Ray(make_float4(0, 0, 0, 0), make_float4(0, 0, 0, 0));
@@ -46,16 +53,32 @@ void KajiyaPathTracer::Render(const ViewPyramid& view, const Bitmap* screen) {
 		view.p3 == KajiyaPathTracer::oldCameraP3
 	);
 
+	if (!cameraStill) {
+		KajiyaPathTracer::ResetAdaptiveSampling();
+	}
+
+	int varianceCount = 0;
+
 	for (int y = 0; y < screen->height; y++) {
 		for (int x = 0; x < screen->width; x++) {
-			int index = x + y * screen->width;
 			KajiyaPathTracer::TraceRay(view, screen, x, y, cameraStill);
 			if (cameraStill) {
+				int index = x + y * screen->width;
 				float variance = KajiyaPathTracer::EstimateSampleVariance(index);
-				cout << "Variance: " << variance << endl;
+				if (variance > targetVariance) {
+					float samples = variance / targetVariance;
+					int amountSamples = min(samples * samples, KajiyaPathTracer::samplingThreshold) ;
+					varianceCount += amountSamples;
+
+					for (int i = 0; i < amountSamples; i++) {
+						KajiyaPathTracer::TraceRay(view, screen, x, y, cameraStill);
+					}
+				}
 			}
 		}
 	}
+
+	cout << "Variance Count: " << varianceCount << endl;
 
 	/** Update the old position of the camera */
 	KajiyaPathTracer::oldCameraPos = view.pos;
@@ -71,11 +94,10 @@ void KajiyaPathTracer::Render(const ViewPyramid& view, const Bitmap* screen) {
 		KajiyaPathTracer::stillFrames = 1;
 	}
 
-	cout << "Amount of still frames: " << KajiyaPathTracer::stillFrames << "\n";
+	cout << "Amount of still frames: " << KajiyaPathTracer::stillFrames << endl;
 }
 
-void KajiyaPathTracer::TraceRay(const lighthouse2::ViewPyramid& view, const lighthouse2::Bitmap* screen, int x, int y, bool cameraStill)
-{
+void KajiyaPathTracer::TraceRay(const ViewPyramid& view, const Bitmap* screen, int x, int y, bool cameraStill) {
 	/** Setup the ray from the screen */
 	float3 point = KajiyaPathTracer::GetPointOnScreen(view, screen, x, y);
 	float4 rayDirection = KajiyaPathTracer::GetRayDirection(view, point);
@@ -88,17 +110,14 @@ void KajiyaPathTracer::TraceRay(const lighthouse2::ViewPyramid& view, const ligh
 	float4 color = primaryRay.Trace(KajiyaPathTracer::bvhs[0], 0);
 	int index = x + y * screen->width;
 
-
 	/** If the camera moved, reset the color to the new color */
 	if (!cameraStill) {
 		screen->pixels[index] = KajiyaPathTracer::ConvertColorToInt(color);
-		KajiyaPathTracer::ResetAdaptiveSampling();
 	}
 
 	/** If the camera is still, update the color to converge */
 	else {
-		float4 oldColor = KajiyaPathTracer::ConvertIntToColor(screen->pixels[index]);
-		screen->pixels[index] = KajiyaPathTracer::ConvertColorToInt(oldColor + ((color - oldColor) / (KajiyaPathTracer::stillFrames + 1)));
+		screen->pixels[index] = KajiyaPathTracer::ConvertColorToInt(KajiyaPathTracer::sums[index] / KajiyaPathTracer::numberOfSamples[index]);
 	}
 
 	/** Save values for adaptive sampling */
@@ -141,10 +160,7 @@ float4 KajiyaPathTracer::ConvertIntToColor(int color) {
 	return make_float4(red, green, blue, 0) / 255;
 }
 
-/** Adaptive sampling */
-static uint* numberOfSamples = new uint[SCRHEIGHT * SCRWIDTH];
-static float4* sums = new float4[SCRHEIGHT * SCRWIDTH];
-static float4* sumSquared = new float4[SCRHEIGHT * SCRWIDTH];
+
 
 void KajiyaPathTracer::ResetAdaptiveSampling() {
 	for (int y = 0; y < SCRHEIGHT; y++) {

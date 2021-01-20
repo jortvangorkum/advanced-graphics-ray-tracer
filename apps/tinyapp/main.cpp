@@ -99,8 +99,13 @@ int main()
 	InitGLFW();
 
 	// initialize renderer: pick one
+<<<<<<< HEAD
 	// renderer = RenderAPI::CreateRenderAPI("RenderCore_Whitted");
 	renderer = RenderAPI::CreateRenderAPI("RenderCore_Kajiya");
+=======
+	//renderer = RenderAPI::CreateRenderAPI("RenderCore_Whitted");
+	 renderer = RenderAPI::CreateRenderAPI("RenderCore_Kajiya");
+>>>>>>> Working adaptive sampling
 	// renderer = RenderAPI::CreateRenderAPI( "RenderCore_Optix7filter" );			// OPTIX7 core, with filtering (static scenes only for now)
 	// renderer = RenderAPI::CreateRenderAPI( "RenderCore_Optix7" );			// OPTIX7 core, best for RTX devices
 	// renderer = RenderAPI::CreateRenderAPI( "RenderCore_OptixPrime_B" );		// OPTIX PRIME, best for pre-RTX CUDA devices
