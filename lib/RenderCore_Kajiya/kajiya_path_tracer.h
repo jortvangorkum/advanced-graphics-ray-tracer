@@ -35,6 +35,8 @@ private:
 	static float3 oldCameraP3;
 
 	/** Adaptive sampling */
+	static float samplingThreshold;
+	static float targetVariance;
 	static uint* numberOfSamples;
 	static float4* sums;
 	static float4* sumSquared;
