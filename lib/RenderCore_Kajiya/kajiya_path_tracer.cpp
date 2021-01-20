@@ -61,9 +61,9 @@ void KajiyaPathTracer::Render(const ViewPyramid& view, const Bitmap* screen) {
 
 	for (int y = 0; y < screen->height; y++) {
 		for (int x = 0; x < screen->width; x++) {
+			int index = x + y * screen->width;
 			KajiyaPathTracer::TraceRay(view, screen, x, y, cameraStill);
 			if (cameraStill) {
-				int index = x + y * screen->width;
 				float variance = KajiyaPathTracer::EstimateSampleVariance(index);
 				if (variance > targetVariance) {
 					float samples = variance / targetVariance;
@@ -75,6 +75,8 @@ void KajiyaPathTracer::Render(const ViewPyramid& view, const Bitmap* screen) {
 					}
 				}
 			}
+			/** Update Screen */
+			screen->pixels[index] = KajiyaPathTracer::ConvertColorToInt(KajiyaPathTracer::sums[index] / KajiyaPathTracer::numberOfSamples[index]);
 		}
 	}
 
@@ -110,17 +112,7 @@ void KajiyaPathTracer::TraceRay(const ViewPyramid& view, const Bitmap* screen, i
 	float4 color = primaryRay.Trace(KajiyaPathTracer::bvhs[0], 0);
 	int index = x + y * screen->width;
 
-	/** If the camera moved, reset the color to the new color */
-	if (!cameraStill) {
-		screen->pixels[index] = KajiyaPathTracer::ConvertColorToInt(color);
-	}
-
-	/** If the camera is still, update the color to converge */
-	else {
-		screen->pixels[index] = KajiyaPathTracer::ConvertColorToInt(KajiyaPathTracer::sums[index] / KajiyaPathTracer::numberOfSamples[index]);
-	}
-
-	/** Save values for adaptive sampling */
+	/** Update values for adaptive sampling */
 	KajiyaPathTracer::numberOfSamples[index]++;
 	KajiyaPathTracer::sums[index] += color;
 	KajiyaPathTracer::sumSquared[index] += color * color;
