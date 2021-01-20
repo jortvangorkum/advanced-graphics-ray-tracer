@@ -24,6 +24,7 @@ public:
 	static void Initialise();
 	static void AddTriangle(float4 v0, float4 v1, float4 v2, uint materialIndex);
 	static void Render(const ViewPyramid& view, const Bitmap* screen);
+	static void TraceRay(const lighthouse2::ViewPyramid& view, const lighthouse2::Bitmap* screen, int x, int y, bool cameraStill);
 private:
 
 	/** Old camera position */
@@ -32,6 +33,13 @@ private:
 	static float3 oldCameraP1;
 	static float3 oldCameraP2;
 	static float3 oldCameraP3;
+
+	/** Adaptive sampling */
+	static uint* numberOfSamples;
+	static float4* sums;
+	static float4* sumSquared;
+	static void ResetAdaptiveSampling();
+	static float EstimateSampleVariance(int index);
 
 	static float3 GetPointOnScreen(const ViewPyramid& view, const Bitmap* screen, const int x, const int y);
 	static float4 GetRayDirection(const ViewPyramid& view, float3 point);
