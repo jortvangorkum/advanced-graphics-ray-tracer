@@ -57,10 +57,51 @@ float4 Ray::Trace(BVH* bvh, uint recursionDepth) {
 	if (intersectionDistance > 0) {
 		/** Hit a light */
 		if (hitType == Ray::HitType::Light) {
-			return make_float4(KajiyaPathTracer::materials[nearestTriangle->materialIndex].color.value, 0);
+			return make_float4(0);
 		}
 
 		CoreMaterial material = KajiyaPathTracer::materials[nearestTriangle->materialIndex];
+		float4 BRDF = make_float4(material.color.value / PI, 0);
+
+		/** 
+		----- 
+		Direct light 
+		----- 
+		*/
+		float4 directLight = make_float4(0);
+		int randomLightIndex = Rand(KajiyaPathTracer::lights.size());
+		Triangle* randomLight = KajiyaPathTracer::lights[randomLightIndex];
+		float4 randomLightPoint = randomLight->GetRandomPoint();
+		KajiyaPathTracer::shadowRay.origin = this->origin;
+		float4 vectorToLight = randomLightPoint - this->origin;
+		KajiyaPathTracer::shadowRay.direction = normalize(vectorToLight);
+
+		float4 lightNormal = randomLight->GetNormal();
+		float ndotl = dot(nearestTriangle->GetNormal(), KajiyaPathTracer::shadowRay.direction);
+		float nldotl = dot(lightNormal, -KajiyaPathTracer::shadowRay.direction);
+
+		if (
+			ndotl > 0 && 
+			nldotl > 0
+		) {
+			tuple<Triangle*, float, Ray::HitType> lightIntersection = make_tuple<Triangle*, float, Ray::HitType>(NULL, NULL, Ray::HitType::Nothing);
+			bvh->root->Traverse(KajiyaPathTracer::shadowRay, bvh->pool, bvh->triangleIndices, lightIntersection);
+			Triangle* directIntersectionTriangle = get<0>(lightIntersection);
+
+			if (randomLight == directIntersectionTriangle) {
+				float distanceToLight = length(vectorToLight);
+				float solidAngle = (nldotl * randomLight->GetArea()) / (distanceToLight * distanceToLight);
+				CoreMaterial lightMaterial = KajiyaPathTracer::materials[randomLight->materialIndex];
+				directLight = make_float4(lightMaterial.color.value, 0) * solidAngle * BRDF * ndotl * KajiyaPathTracer::lights.size();
+			}
+		}
+
+
+		/** 
+		----- 
+		Indirect light 
+		----- 
+		*/
 		float4 normal = nearestTriangle->GetNormal();
 		float4 intersectionPoint = this->GetIntersectionPoint(intersectionDistance);
 
@@ -93,11 +134,10 @@ float4 Ray::Trace(BVH* bvh, uint recursionDepth) {
 		/** Flips the direction away from the normal if needed */
 		float4 r = this->direction = (dot(uniformSample, normal) > 0) ? uniformSample : -uniformSample;
 		this->origin = intersectionPoint + (this->direction * EPSILON);
-		
 		float4 hitColor = this->Trace(bvh, recursionDepth + 1);
+		float4 indirectLight = dot(r, normal) * BRDF * hitColor * 2.0 * PI;
 
-		float4 BRDF = make_float4(material.color.value / PI, 0);
-		return dot(r, normal) * BRDF * hitColor * 2.0 * PI;
+		return indirectLight + directLight;
 	}
 
 	return make_float4(0,0,0,0);
