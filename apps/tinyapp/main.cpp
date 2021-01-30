@@ -34,15 +34,36 @@ static std::bitset<1024> keystates;
 void PrepareScene()
 {
 	/** Add light material */
-	const int emittance = 100;
+	const int emittance = 60;
 	renderer->AddMaterial(make_float3(emittance));
 	/** Add scene */
 	int boxScene = renderer->AddMesh("../_shareddata/AT-ST.obj", 1);
 	renderer->AddInstance(boxScene);
 	
-	//// Reflection
-	//HostMaterial* material = renderer->GetMaterial(7);
-	//material->reflection.value = 1;
+	// Reflection
+	HostMaterial* material1 = renderer->GetMaterial(1);
+	material1->reflection.value = 0.35f;
+
+	HostMaterial* material2 = renderer->GetMaterial(21);
+	material2->reflection.value = 0.8f;
+
+	HostMaterial* material3 = renderer->GetMaterial(15);
+	material3->reflection.value = 0.8f;
+
+	HostMaterial* material4 = renderer->GetMaterial(16);
+	material4->reflection.value = 0.8f;
+
+	HostMaterial* material5 = renderer->GetMaterial(17);
+	material5->reflection.value = 0.8f;
+
+	HostMaterial* material6 = renderer->GetMaterial(22);
+	material6->reflection.value = 0.6f;
+
+	//material1->refraction.value = 1f;
+
+	// Reflection
+	//HostMaterial* material2 = renderer->GetMaterial(3);
+	//material2->reflection.value = 0.3f;
 
 	//// Refraction
 	//HostMaterial* material2 = renderer->GetMaterial(3);
