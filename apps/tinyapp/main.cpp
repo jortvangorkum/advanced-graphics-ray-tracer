@@ -34,11 +34,29 @@ static std::bitset<1024> keystates;
 void PrepareScene()
 {
 	/** Add light material */
-	const int emittance = 5;
+	const int emittance = 60;
 	renderer->AddMaterial(make_float3(emittance));
 	/** Add scene */
-	int boxScene = renderer->AddMesh("../_shareddata/udim-monster.obj", 3.0f);
+	int boxScene = renderer->AddMesh("../_shareddata/AT-ST.obj", 1);
 	renderer->AddInstance(boxScene);
+	
+	// Reflection
+	HostMaterial* material1 = renderer->GetMaterial(1);
+	material1->reflection.value = 0.35f;
+
+	HostMaterial* material2 = renderer->GetMaterial(21);
+	material2->reflection.value = 0.8f;
+
+	HostMaterial* material3 = renderer->GetMaterial(15);
+	material3->reflection.value = 0.8f;
+
+	HostMaterial* material4 = renderer->GetMaterial(16);
+	material4->reflection.value = 0.8f;
+
+	HostMaterial* material5 = renderer->GetMaterial(17);
+	material5->reflection.value = 0.35f;
+
+	HostMaterial* material6 = renderer->GetMaterial(22);
 	
 	//// Reflection
 	//HostMaterial* material = renderer->GetMaterial(7);
@@ -81,8 +99,8 @@ int main()
 	InitGLFW();
 
 	// initialize renderer: pick one
-	renderer = RenderAPI::CreateRenderAPI("RenderCore_Whitted");
-	// renderer = RenderAPI::CreateRenderAPI("RenderCore_Kajiya");
+	// renderer = RenderAPI::CreateRenderAPI("RenderCore_Whitted");
+	renderer = RenderAPI::CreateRenderAPI("RenderCore_Kajiya");
 	// renderer = RenderAPI::CreateRenderAPI( "RenderCore_Optix7filter" );			// OPTIX7 core, with filtering (static scenes only for now)
 	// renderer = RenderAPI::CreateRenderAPI( "RenderCore_Optix7" );			// OPTIX7 core, best for RTX devices
 	// renderer = RenderAPI::CreateRenderAPI( "RenderCore_OptixPrime_B" );		// OPTIX PRIME, best for pre-RTX CUDA devices
