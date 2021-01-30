@@ -54,10 +54,10 @@ void PrepareScene()
 	material4->reflection.value = 0.8f;
 
 	HostMaterial* material5 = renderer->GetMaterial(17);
-	material5->reflection.value = 0.8f;
+	material5->reflection.value = 0.35f;
 
 	HostMaterial* material6 = renderer->GetMaterial(22);
-	material6->reflection.value = 0.6f;
+	//material6->reflection.value = 0.4f;
 
 	//material1->refraction.value = 1f;
 
