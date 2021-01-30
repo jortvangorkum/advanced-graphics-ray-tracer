@@ -38,7 +38,7 @@ bool Ray::IntersectionBounds(aabb& bounds, float& distance) {
 	return true;
 }
 
-float4 Ray::Trace(BVH* bvh, uint recursionDepth) {
+float4 Ray::Trace(BVH* bvh, bool lastSpecular, uint recursionDepth) {
 	/** check if we reached our recursion depth */
 	if (recursionDepth > KajiyaPathTracer::recursionThreshold) {
 		return make_float4(0, 0, 0, 0);
@@ -57,7 +57,13 @@ float4 Ray::Trace(BVH* bvh, uint recursionDepth) {
 	if (intersectionDistance > 0) {
 		/** Hit a light */
 		if (hitType == Ray::HitType::Light) {
-			return make_float4(0);
+			if (lastSpecular) {
+				CoreMaterial lightMaterial = KajiyaPathTracer::materials[nearestTriangle->materialIndex];
+				return make_float4(lightMaterial.color.value, 0);
+			}
+			else {
+				return make_float4(0);
+			}
 		}
 
 		CoreMaterial material = KajiyaPathTracer::materials[nearestTriangle->materialIndex];
@@ -115,7 +121,7 @@ float4 Ray::Trace(BVH* bvh, uint recursionDepth) {
 		if (randomChoice < reflectionChance) {
 			this->direction = this->direction - 2.0f * normal * dot(normal, this->direction);
 			this->origin = intersectionPoint + EPSILON * this->direction;
-			return this->Trace(bvh, recursionDepth + 1);
+			return this->Trace(bvh, true, recursionDepth + 1);
 		}
 
 		/** If material = refraction, given a certain chance it calculates the refraction color */
@@ -125,7 +131,7 @@ float4 Ray::Trace(BVH* bvh, uint recursionDepth) {
 			if (length(refractionDirection) > EPSILON) {
 				this->origin = intersectionPoint + (refractionDirection * EPSILON);
 				this->direction = refractionDirection;
-				return this->Trace(bvh, recursionDepth + 1);
+				return this->Trace(bvh, true, recursionDepth + 1);
 			}
 		}
 
@@ -137,7 +143,7 @@ float4 Ray::Trace(BVH* bvh, uint recursionDepth) {
 		/** Flips the direction away from the normal if needed */
 		float4 r = this->direction = (dot(uniformSample, normal) > 0) ? uniformSample : -uniformSample;
 		this->origin = intersectionPoint + (this->direction * EPSILON);
-		float4 hitColor = this->Trace(bvh, recursionDepth + 1);
+		float4 hitColor = this->Trace(bvh, false, recursionDepth + 1);
 		float4 indirectLight = dot(r, normal) * BRDF * hitColor * 2.0 * PI;
 
 		return indirectLight + directLight;

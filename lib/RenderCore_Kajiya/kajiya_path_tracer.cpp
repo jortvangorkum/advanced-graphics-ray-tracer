@@ -109,7 +109,7 @@ void KajiyaPathTracer::TraceRay(const ViewPyramid& view, const Bitmap* screen, i
 	primaryRay.direction = rayDirection;
 
 	/** Trace the ray */
-	float4 color = primaryRay.Trace(KajiyaPathTracer::bvhs[0], 0);
+	float4 color = primaryRay.Trace(KajiyaPathTracer::bvhs[0], true, 0);
 	int index = x + y * screen->width;
 
 	/** Update values for adaptive sampling */
