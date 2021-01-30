@@ -89,6 +89,9 @@ float4 Ray::Trace(BVH* bvh, bool lastSpecular, uint recursionDepth) {
 		float ndotl = dot(nearestTriangle->GetNormal(), KajiyaPathTracer::shadowRay.direction);
 		float nldotl = dot(lightNormal, -KajiyaPathTracer::shadowRay.direction);
 
+	    float distanceToLight = length(vectorToLight);
+		float solidAngle = (nldotl * randomLight->GetArea()) / (distanceToLight * distanceToLight);
+
 		if (
 			ndotl > 0 && 
 			nldotl > 0
@@ -97,12 +100,11 @@ float4 Ray::Trace(BVH* bvh, bool lastSpecular, uint recursionDepth) {
 			bvh->root->Traverse(KajiyaPathTracer::shadowRay, bvh->pool, bvh->triangleIndices, lightIntersection);
 			Triangle* intersect = get<0>(lightIntersection);
 			float directIntersectionDist = get<1>(lightIntersection);
-			float distanceToLight = length(vectorToLight);
 
 			if (intersect == NULL || distanceToLight < directIntersectionDist + EPSILON) {
-				float solidAngle = (nldotl * randomLight->GetArea()) / (distanceToLight * distanceToLight);
 				CoreMaterial lightMaterial = KajiyaPathTracer::materials[randomLight->materialIndex];
-				directLight = make_float4(lightMaterial.color.value, 0) * solidAngle * BRDF * ndotl * KajiyaPathTracer::lights.size();
+				float misPDF = (1 / solidAngle) + (1 / (2.0 * PI));
+				directLight = make_float4(lightMaterial.color.value, 0) * BRDF * (ndotl / misPDF) * KajiyaPathTracer::lights.size();
 			}
 		}
 
@@ -145,7 +147,8 @@ float4 Ray::Trace(BVH* bvh, bool lastSpecular, uint recursionDepth) {
 		float4 r = this->direction = (dot(uniformSample, normal) > 0) ? uniformSample : -uniformSample;
 		this->origin = intersectionPoint + (this->direction * EPSILON);
 		float4 hitColor = this->Trace(bvh, false, recursionDepth + 1);
-		float4 indirectLight = dot(r, normal) * BRDF * hitColor * 2.0 * PI;
+		float misPDF = solidAngle > 0 ? (1 / solidAngle) + (1 / (2.0 * PI)) : (1 / (2.0 * PI));
+		float4 indirectLight = (dot(r, normal) / misPDF) * BRDF * hitColor;
 
 		return indirectLight + directLight;
 	}
