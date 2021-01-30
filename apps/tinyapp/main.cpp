@@ -34,10 +34,10 @@ static std::bitset<1024> keystates;
 void PrepareScene()
 {
 	/** Add light material */
-	const int emittance = 15;
+	const int emittance = 100;
 	renderer->AddMaterial(make_float3(emittance));
 	/** Add scene */
-	int boxScene = renderer->AddMesh("../_shareddata/basic_box.obj", 0.1f);
+	int boxScene = renderer->AddMesh("../_shareddata/AT-ST.obj", 1);
 	renderer->AddInstance(boxScene);
 	
 	//// Reflection

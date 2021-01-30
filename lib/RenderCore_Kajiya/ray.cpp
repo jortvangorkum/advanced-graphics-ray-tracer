@@ -95,10 +95,11 @@ float4 Ray::Trace(BVH* bvh, bool lastSpecular, uint recursionDepth) {
 		) {
 			tuple<Triangle*, float, Ray::HitType> lightIntersection = make_tuple<Triangle*, float, Ray::HitType>(NULL, NULL, Ray::HitType::Nothing);
 			bvh->root->Traverse(KajiyaPathTracer::shadowRay, bvh->pool, bvh->triangleIndices, lightIntersection);
+			Triangle* intersect = get<0>(lightIntersection);
 			float directIntersectionDist = get<1>(lightIntersection);
 			float distanceToLight = length(vectorToLight);
 
-			if (distanceToLight < directIntersectionDist + EPSILON) {
+			if (intersect == NULL || distanceToLight < directIntersectionDist + EPSILON) {
 				float solidAngle = (nldotl * randomLight->GetArea()) / (distanceToLight * distanceToLight);
 				CoreMaterial lightMaterial = KajiyaPathTracer::materials[randomLight->materialIndex];
 				directLight = make_float4(lightMaterial.color.value, 0) * solidAngle * BRDF * ndotl * KajiyaPathTracer::lights.size();
