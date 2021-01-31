@@ -26,7 +26,7 @@ Sixtieth
 ![image info](./renders/atst-with-adapsampl-sixtiest-frame.JPG)
 
 First frame
-![image info](./renders/atst-with-dapsampl-first-frame.JPG)
+![image info](./renders/atst-with-adapsampl-first-frame.JPG)
 
 ### Without both
 Sixtieth frame
