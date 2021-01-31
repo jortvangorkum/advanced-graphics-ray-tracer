@@ -37,7 +37,11 @@ void PrepareScene()
 	const int emittance = 60;
 	renderer->AddMaterial(make_float3(emittance));
 	/** Add scene */
+<<<<<<< HEAD
 	int boxScene = renderer->AddMesh("../_shareddata/AT-ST.obj", 1);
+=======
+	int boxScene = renderer->AddMesh("../_shareddata/basic_box.obj", 0.1f);
+>>>>>>> 9782f9bef0d81899f7153cd2a98ce0876f907480
 	renderer->AddInstance(boxScene);
 	
 	// Reflection
@@ -100,12 +104,17 @@ int main()
 
 	// initialize renderer: pick one
 <<<<<<< HEAD
+<<<<<<< HEAD
 	// renderer = RenderAPI::CreateRenderAPI("RenderCore_Whitted");
 	renderer = RenderAPI::CreateRenderAPI("RenderCore_Kajiya");
 =======
 	//renderer = RenderAPI::CreateRenderAPI("RenderCore_Whitted");
 	 renderer = RenderAPI::CreateRenderAPI("RenderCore_Kajiya");
 >>>>>>> Working adaptive sampling
+=======
+	//renderer = RenderAPI::CreateRenderAPI("RenderCore_Whitted");
+	 renderer = RenderAPI::CreateRenderAPI("RenderCore_Kajiya");
+>>>>>>> 9782f9bef0d81899f7153cd2a98ce0876f907480
 	// renderer = RenderAPI::CreateRenderAPI( "RenderCore_Optix7filter" );			// OPTIX7 core, with filtering (static scenes only for now)
 	// renderer = RenderAPI::CreateRenderAPI( "RenderCore_Optix7" );			// OPTIX7 core, best for RTX devices
 	// renderer = RenderAPI::CreateRenderAPI( "RenderCore_OptixPrime_B" );		// OPTIX PRIME, best for pre-RTX CUDA devices
