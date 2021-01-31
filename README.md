@@ -2,7 +2,40 @@
 Jort van Gorkum - 6142834
 Vince van Noort - 6187021
 
-## Part 2
+
+# Part 3
+Implemented:
+- Adaptive Sampling 
+- Next Event Estimation
+- Multiple Important Sampling? (Jort)
+
+References:
+- https://www.mff.cuni.cz/veda/konference/wds/proc/pdf13/WDS13_110_i5-Sik.pdf
+
+Below we show some example renders to demonstrate our implementations of adaptive sampling and next event estimation.
+
+### With Adaptive Sampling & Next Event Estimation
+Thirtieth frame
+![image info](./renders/atst-with-nee-thirtied-frame.JPG)
+
+First frame
+![image info](./renders/atst-with-nee-first-frame.JPG)
+
+### With Adaptive Sampling
+Sixtieth
+![image info](./renders/atst-with-adapsampl-sixtiest-frame.JPG)
+
+First frame
+![image info](./renders/atst-with-dapsampl-first-frame.JPG)
+
+### Without both
+Sixtieth frame
+![image info](./renders/atst-without-both-sixtiest-frame.JPG)
+
+First frame
+![image info](./renders/atst-without-both-first-frame.JPG)
+
+# Part 2
 All basics done.
 
 ### Additional points implemented:
@@ -28,7 +61,7 @@ Monster Kajiya - Render time per frame ~4500ms
 Monster Whitted - Render time per frame ~9600ms (with 4x anti-aliasing)
 ![image info](./renders/monster-whitted.JPG)
 
-## Part 1
+# Part 1
 All basics done.
 
 ### Additional points implemented:
