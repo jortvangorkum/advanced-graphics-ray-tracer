@@ -17,15 +17,9 @@ float4 KajiyaPathTracer::globalIllumination = make_float4(0.2, 0.2, 0.2, 0);
 void KajiyaPathTracer::Initialise() {
 	/** Lights */
 	lights.push_back(new Triangle(
-<<<<<<< HEAD
 		make_float4(-15, 60, 0, 0),
 		make_float4(15, 60, 0, 0),
 		make_float4(0, 60, 15, 0),
-=======
-		make_float4(0, 10, 0, 0),
-		make_float4(100, 10, 0, 0),
-		make_float4(0, 10, 100, 0),
->>>>>>> 9782f9bef0d81899f7153cd2a98ce0876f907480
 		0
 	));
 }
