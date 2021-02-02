@@ -15,24 +15,24 @@ References:
 Below we show some example renders to demonstrate our implementations of adaptive sampling and next event estimation.
 
 ### With Adaptive Sampling & Next Event Estimation
-Thirtieth frame
+Thirtieth frame ~(180s)
 ![image info](./renders/atst-with-nee-thirtied-frame.JPG)
 
-First frame
+First frame (~6s)
 ![image info](./renders/atst-with-nee-first-frame.JPG)
 
 ### With Adaptive Sampling
-Sixtieth
+Sixtieth (~180s)
 ![image info](./renders/atst-with-adapsampl-sixtiest-frame.JPG)
 
-First frame
+First frame (~6s)
 ![image info](./renders/atst-with-adapsampl-first-frame.JPG)
 
 ### Without both
-Sixtieth frame
+Sixtieth frame (~180s)
 ![image info](./renders/atst-without-both-sixtiest-frame.JPG)
 
-First frame
+First frame (~4s)
 ![image info](./renders/atst-without-both-first-frame.JPG)
 
 # Part 2
