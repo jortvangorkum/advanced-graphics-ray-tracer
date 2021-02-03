@@ -21,14 +21,12 @@ Below we show some example renders to demonstrate our implementations of adaptiv
 ### 4k Version
 ![image info](./renders/atst-4k-11-frame.png)
 
-
 ### With Adaptive Sampling, Next Event Estimation & Multiple Importance Sampling
 Thirtieth frame (~180s)
 ![image info](./renders/atst-with-adpt-nee-mis-thirtied-frame.png)
 
 First frame (~6s)
 ![image info](./renders/atst-with-adpt-nee-mis-first-frame.png)
-
 
 ### With Adaptive Sampling & Next Event Estimation
 Thirtieth frame (~180s)
@@ -38,7 +36,7 @@ First frame (~6s)
 ![image info](./renders/atst-with-nee-first-frame.JPG)
 
 ### With Adaptive Sampling
-Sixtieth (~180s)
+Sixtieth frame (~180s)
 ![image info](./renders/atst-with-adapsampl-sixtiest-frame.JPG)
 
 First frame (~6s)
