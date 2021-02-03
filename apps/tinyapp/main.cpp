@@ -39,7 +39,7 @@ void PrepareScene()
 	/** Add scene */
 	int boxScene = renderer->AddMesh("../_shareddata/AT-ST.obj", 1);
 	renderer->AddInstance(boxScene);
-	
+  
 	// Reflection
 	HostMaterial* material1 = renderer->GetMaterial(1);
 	material1->reflection.value = 0.35f;
@@ -57,10 +57,14 @@ void PrepareScene()
 	material5->reflection.value = 0.35f;
 
 	HostMaterial* material6 = renderer->GetMaterial(22);
-	
-	//// Reflection
-	//HostMaterial* material = renderer->GetMaterial(7);
-	//material->reflection.value = 1;
+
+	//material6->reflection.value = 0.4f;
+
+	//material1->refraction.value = 1f;
+
+	// Reflection
+	//HostMaterial* material2 = renderer->GetMaterial(3);
+	//material2->reflection.value = 0.3f;
 
 	//// Refraction
 	//HostMaterial* material2 = renderer->GetMaterial(3);

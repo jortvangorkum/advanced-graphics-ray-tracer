@@ -2,7 +2,56 @@
 Jort van Gorkum - 6142834
 Vince van Noort - 6187021
 
-## Part 2
+
+# Part 3
+Implemented:
+- Adaptive Sampling 
+- Next Event Estimation
+- Multiple Important Sampling
+
+References:
+- https://www.mff.cuni.cz/veda/konference/wds/proc/pdf13/WDS13_110_i5-Sik.pdf
+
+Inspired by:
+- http://www.realtimerendering.com/raytracinggems/unofficial_RayTracingGems_v1.7.pdf
+  - page: 213
+
+Below we show some example renders to demonstrate our implementations of adaptive sampling and next event estimation.
+
+### 4k Version
+![image info](./renders/atst-4k-11-frame.png)
+
+
+### With Adaptive Sampling, Next Event Estimation & Multiple Important Sampling
+Thirtieth frame (~180s)
+![image info](./renders/atst-with-adpt-nee-mis-thirtied-frame.png)
+
+First frame (~6s)
+![image info](./renders/atst-with-adpt-nee-mis-first-frame.png)
+
+
+### With Adaptive Sampling & Next Event Estimation
+Thirtieth frame (~180s)
+![image info](./renders/atst-with-nee-thirtied-frame.JPG)
+
+First frame (~6s)
+![image info](./renders/atst-with-nee-first-frame.JPG)
+
+### With Adaptive Sampling
+Sixtieth (~180s)
+![image info](./renders/atst-with-adapsampl-sixtiest-frame.JPG)
+
+First frame (~6s)
+![image info](./renders/atst-with-adapsampl-first-frame.JPG)
+
+### Without both
+Sixtieth frame (~180s)
+![image info](./renders/atst-without-both-sixtiest-frame.JPG)
+
+First frame (~4s)
+![image info](./renders/atst-without-both-first-frame.JPG)
+
+# Part 2
 All basics done.
 
 ### Additional points implemented:
@@ -28,7 +77,7 @@ Monster Kajiya - Render time per frame ~4500ms
 Monster Whitted - Render time per frame ~9600ms (with 4x anti-aliasing)
 ![image info](./renders/monster-whitted.JPG)
 
-## Part 1
+# Part 1
 All basics done.
 
 ### Additional points implemented:
