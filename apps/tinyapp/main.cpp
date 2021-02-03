@@ -39,7 +39,7 @@ void PrepareScene()
 	/** Add scene */
 	int boxScene = renderer->AddMesh("../_shareddata/AT-ST.obj", 1);
 	renderer->AddInstance(boxScene);
-	
+
 	// Reflection
 	HostMaterial* material1 = renderer->GetMaterial(1);
 	material1->reflection.value = 0.35f;
@@ -55,9 +55,12 @@ void PrepareScene()
 
 	HostMaterial* material5 = renderer->GetMaterial(17);
 	material5->reflection.value = 0.35f;
+<<<<<<< HEAD
 
 	HostMaterial* material6 = renderer->GetMaterial(22);
 	//material6->reflection.value = 0.4f;
+=======
+>>>>>>> Working MIS
 
 	//material1->refraction.value = 1f;
 
