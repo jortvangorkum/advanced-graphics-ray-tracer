@@ -39,7 +39,7 @@ void PrepareScene()
 	/** Add scene */
 	int boxScene = renderer->AddMesh("../_shareddata/AT-ST.obj", 1);
 	renderer->AddInstance(boxScene);
-
+  
 	// Reflection
 	HostMaterial* material1 = renderer->GetMaterial(1);
 	material1->reflection.value = 0.35f;
@@ -57,6 +57,7 @@ void PrepareScene()
 	material5->reflection.value = 0.35f;
 
 	HostMaterial* material6 = renderer->GetMaterial(22);
+
 	//material6->reflection.value = 0.4f;
 
 	//material1->refraction.value = 1f;
@@ -102,8 +103,8 @@ int main()
 	InitGLFW();
 
 	// initialize renderer: pick one
-	//renderer = RenderAPI::CreateRenderAPI("RenderCore_Whitted");
-	 renderer = RenderAPI::CreateRenderAPI("RenderCore_Kajiya");
+	// renderer = RenderAPI::CreateRenderAPI("RenderCore_Whitted");
+	renderer = RenderAPI::CreateRenderAPI("RenderCore_Kajiya");
 	// renderer = RenderAPI::CreateRenderAPI( "RenderCore_Optix7filter" );			// OPTIX7 core, with filtering (static scenes only for now)
 	// renderer = RenderAPI::CreateRenderAPI( "RenderCore_Optix7" );			// OPTIX7 core, best for RTX devices
 	// renderer = RenderAPI::CreateRenderAPI( "RenderCore_OptixPrime_B" );		// OPTIX PRIME, best for pre-RTX CUDA devices
