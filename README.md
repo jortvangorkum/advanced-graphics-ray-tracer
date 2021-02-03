@@ -16,7 +16,7 @@ Inspired by:
 - http://www.realtimerendering.com/raytracinggems/unofficial_RayTracingGems_v1.7.pdf
   - page: 213
 
-Below we show some example renders to demonstrate our implementations of adaptive sampling and next event estimation.
+Below we show some example renders to demonstrate our implementations of adaptive sampling, next event estimation and multiple importance sampling.
 
 ### 4k Version
 ![image info](./renders/atst-4k-11-frame.png)
