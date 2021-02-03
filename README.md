@@ -35,6 +35,13 @@ Below we show some example renders to demonstrate our implementations of adaptiv
 1th frame (~6s)
 ![image info](./renders/atst-with-nee-first-frame.JPG)
 
+### With Next Event Estimation
+38th frame (~180s)
+![image info](./renders/atst-with-nee-without-adpt-38-frame.png)
+
+1th frame (~5s)
+![image info](./renders/atst-with-nee-first-frame.JPG)
+
 ### With Adaptive Sampling
 32th frame (~180s)
 ![image info](./renders/atst-with-adapsampl-sixtiest-frame.JPG)
