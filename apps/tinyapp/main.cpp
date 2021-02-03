@@ -55,12 +55,9 @@ void PrepareScene()
 
 	HostMaterial* material5 = renderer->GetMaterial(17);
 	material5->reflection.value = 0.35f;
-<<<<<<< HEAD
 
 	HostMaterial* material6 = renderer->GetMaterial(22);
 	//material6->reflection.value = 0.4f;
-=======
->>>>>>> Working MIS
 
 	//material1->refraction.value = 1f;
 

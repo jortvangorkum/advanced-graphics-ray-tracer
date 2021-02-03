@@ -7,15 +7,31 @@ Vince van Noort - 6187021
 Implemented:
 - Adaptive Sampling 
 - Next Event Estimation
-- Multiple Important Sampling? (Jort)
+- Multiple Important Sampling
 
 References:
 - https://www.mff.cuni.cz/veda/konference/wds/proc/pdf13/WDS13_110_i5-Sik.pdf
 
+Inspired by:
+- http://www.realtimerendering.com/raytracinggems/unofficial_RayTracingGems_v1.7.pdf
+  - page: 213
+
 Below we show some example renders to demonstrate our implementations of adaptive sampling and next event estimation.
 
+### 4k Version
+![image info](./renders/atst-4k-11-frame.png)
+
+
+### With Adaptive Sampling, Next Event Estimation & Multiple Important Sampling
+Thirtieth frame (~180s)
+![image info](./renders/atst-with-adpt-nee-mis-thirtied-frame.png)
+
+First frame (~6s)
+![image info](./renders/atst-with-adpt-nee-mis-first-frame.png)
+
+
 ### With Adaptive Sampling & Next Event Estimation
-Thirtieth frame ~(180s)
+Thirtieth frame (~180s)
 ![image info](./renders/atst-with-nee-thirtied-frame.JPG)
 
 First frame (~6s)
