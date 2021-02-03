@@ -43,7 +43,7 @@ Below we show some example renders to demonstrate our implementations of adaptiv
 ![image info](./renders/atst-with-adapsampl-first-frame.JPG)
 
 ### Without both
-60th frame (~180s)
+54th frame (~180s)
 ![image info](./renders/atst-without-both-sixtiest-frame.JPG)
 
 1th frame (~4s)
