@@ -7,7 +7,7 @@ Vince van Noort - 6187021
 Implemented:
 - Adaptive Sampling 
 - Next Event Estimation
-- Multiple Important Sampling
+- Multiple Importance Sampling
 
 References:
 - https://www.mff.cuni.cz/veda/konference/wds/proc/pdf13/WDS13_110_i5-Sik.pdf
@@ -22,7 +22,7 @@ Below we show some example renders to demonstrate our implementations of adaptiv
 ![image info](./renders/atst-4k-11-frame.png)
 
 
-### With Adaptive Sampling, Next Event Estimation & Multiple Important Sampling
+### With Adaptive Sampling, Next Event Estimation & Multiple Importance Sampling
 Thirtieth frame (~180s)
 ![image info](./renders/atst-with-adpt-nee-mis-thirtied-frame.png)
 
