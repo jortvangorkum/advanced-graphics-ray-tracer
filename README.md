@@ -9,7 +9,10 @@ Implemented:
 - Next Event Estimation
 - Multiple Importance Sampling
 
-References:
+## Conclusion
+Using Adaptive Sampling lowers the amount of noticable 'fireflies' in the same amount of time, but it does not prevent it.
+
+### References:
 - https://www.mff.cuni.cz/veda/konference/wds/proc/pdf13/WDS13_110_i5-Sik.pdf
 
 Inspired by:
@@ -26,6 +29,13 @@ Below we show some example renders to demonstrate our implementations of adaptiv
 ![image info](./renders/atst-with-adpt-nee-mis-thirtied-frame.png)
 
 1th frame (~6s)
+![image info](./renders/atst-with-adpt-nee-mis-first-frame.png)
+
+### With Next Event Estimation & Multiple Importance Sampling
+36th frame (~180s)
+![image info](./renders/atst-with-nee-mis-without-adpt-36-frame.png)
+
+1th frame (~5s)
 ![image info](./renders/atst-with-adpt-nee-mis-first-frame.png)
 
 ### With Adaptive Sampling & Next Event Estimation
