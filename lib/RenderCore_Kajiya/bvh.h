@@ -15,7 +15,6 @@ public:
 
 	BVHNode* pool;
 	BVHNode* root;
-	int poolPtr;
 	int* triangleIndices;
 	BVH(int triangleIndex, int triangleCount);
 };

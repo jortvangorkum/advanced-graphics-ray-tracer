@@ -15,11 +15,13 @@ public:
 	aabb bounds;
 	bool isLeaf = true;
 	int left;
+	int right;
+
 	int first;
 	int count;
 	int splitAxis;
 
-	void SubdivideNode(BVHNode* pool, int* triangleIndices, int& poolPtr);
+	void SubdivideNode(BVHNode* pool, int* triangleIndices, int start, int size);
 	bool PartitionTriangles(BVHNode* pool, int* triangleIndices);
 	void UpdateBounds(int* triangleIndices);
 	void Traverse(Ray& ray, BVHNode* pool, int* triangleIndices, tuple<Triangle*, float, Ray::HitType>& intersection);
