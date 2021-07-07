@@ -102,7 +102,10 @@ bool BVHNode::PartitionTriangles(BVHNode* pool, int* triangleIndices) {
 
 	for (int i = 0; i < BVH::binCount - 1; i++) {
 		Bin* binLeft = &BVH::binsLeft[i];
-		Bin* binRight = &BVH::binsRight[i];
+		Bin* binRight = &BVH::binsRight[i + 1];
+		
+		/** Make sure the counts are equal */
+		assert((binLeft->count + binRight->count) == this->count);
 
 		float cost = binLeft->bounds.Area() * binLeft->count + binRight->bounds.Area() * binRight->count;
 
@@ -131,7 +134,7 @@ bool BVHNode::PartitionTriangles(BVHNode* pool, int* triangleIndices) {
 	}
 
 	Bin* binLeft = &BVH::binsLeft[binIndex];
-	Bin* binRight = &BVH::binsRight[binIndex];
+	Bin* binRight = &BVH::binsRight[binIndex + 1];
 
 	BVHNode* left = &pool[this->left];
 	BVHNode* right = &pool[this->left + 1];
@@ -140,6 +143,8 @@ bool BVHNode::PartitionTriangles(BVHNode* pool, int* triangleIndices) {
 	left->count = j - this->first;
 	right->first = j;
 	right->count = this->count - left->count;
+
+	assert(left->count + right->count == this->count);
 
 	left->bounds = binLeft->bounds;
 	right->bounds = binRight->bounds;
